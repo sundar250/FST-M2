@@ -1,0 +1,47 @@
+package examples;
+
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.BeforeEach;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class Activity1 {
+
+     ArrayList<String> list1;
+
+    @BeforeEach
+     void setUp() throws Exception
+    {
+         list1 = new ArrayList<String>();
+        list1.add("alpha");
+        list1.add("beta");
+
+    }
+    @Test
+    public  void insertTest()
+    {
+
+        assertEquals(2,list1.size());
+        list1.add("gamma");
+        assertEquals(3,list1.size());
+        assertEquals("alpha",list1.get(0));
+        assertEquals("beta",list1.get(1));
+        assertEquals("gamma",list1.get(2));
+
+    }
+
+    @Test
+    public  void replaceTest()
+    {
+
+        list1.set(1,"Testing");
+        System.out.println(list1);
+        assertEquals("alpha",list1.get(0));
+        assertEquals("Testing",list1.get(1));
+
+
+    }
+}
