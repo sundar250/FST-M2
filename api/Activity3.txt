@@ -1,0 +1,79 @@
+package Package1;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.lessThan;
+import static io.restassured.RestAssured.given;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Activity3 {
+	RequestSpecification requestspec;
+	ResponseSpecification responsespec;
+	@BeforeClass
+	public void SetUp()
+	{
+		requestspec = new RequestSpecBuilder().setContentType(ContentType.JSON)
+				.setBaseUri("https://petstore.swagger.io/v2/pet").build();
+		
+		responsespec = new ResponseSpecBuilder().expectStatusCode(200)
+				             .expectContentType(ContentType.JSON)
+				             .expectBody("status", equalTo("alive")).build();
+	}
+	
+	@Test(priority=1)
+	public void postrequest()
+	{
+		Map<String, Object> reqBody = new HashMap<String, Object>();
+		//Map<String, Object> reqBody2 = new HashMap<String, Object>();
+		reqBody.put("id", 709500);
+		reqBody.put("name", "Tommy");
+		reqBody.put("status", "alive");
+		reqBody.put("id", 709501);
+		reqBody.put("name", "Jimmy");
+		reqBody.put("status", "alive");
+        given().spec(requestspec).body(reqBody).when().post().then().spec(responsespec);
+       // given().spec(requestspec).body(reqBody2).when().post().then().spec(responsespec);
+	
+	}
+	
+	
+	
+	  @DataProvider public Object[][] petIdProvider () { Object[][] testData = new
+	  Object[][] { { 709500, "Tommy", "alive" }, { 709501, "Jimmy", "alive" } };
+	  return testData; }
+	  
+	  
+	
+	  @Test(dataProvider="petIdProvider",priority=2)
+	  
+	  public void getrequest(int id, String
+	  name, String status) { given().spec(requestspec).pathParam("petId",
+	  id).when().get("/{petId}"); }
+	 
+	 
+	 
+	
+		
+		  @Test(dataProvider="petIdProvider",priority=3) 
+		  public void deleterequest(int id, String
+		  name, String status) { given().spec(requestspec).pathParam("petId",
+		  id).when().delete("/{petId}"); }
+		 
+	 
+	 
+		
+}
+
+
+
